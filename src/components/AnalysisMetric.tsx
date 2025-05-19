@@ -3,34 +3,41 @@ import React from "react";
 import { Progress } from "@/components/ui/progress";
 
 interface AnalysisMetricProps {
-  title: string;
+  label: string;
   value: number;
-  icon?: React.ReactNode;
+  color: string;
 }
 
-const AnalysisMetric: React.FC<AnalysisMetricProps> = ({ title, value, icon }) => {
-  // Determine color based on value
+const AnalysisMetric: React.FC<AnalysisMetricProps> = ({ label, value, color }) => {
   const getColorClass = () => {
-    if (value >= 80) return "text-interview-success";
-    if (value >= 60) return "text-interview-primary";
-    if (value >= 40) return "text-interview-warning";
-    return "text-interview-danger";
-  };
-
-  const getProgressColor = () => {
-    if (value >= 80) return "bg-interview-success";
-    if (value >= 60) return "bg-interview-primary";
-    if (value >= 40) return "bg-interview-warning";
-    return "bg-interview-danger";
+    switch (color) {
+      case "green":
+        return "bg-interview-success";
+      case "yellow":
+        return "bg-interview-warning";
+      case "blue":
+        return "bg-interview-info";
+      case "purple":
+        return "bg-interview-primary";
+      default:
+        return "bg-interview-accent";
+    }
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-sm border border-interview-border">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-medium text-interview-secondary">{title}</h3>
-        <span className={`text-lg font-bold ${getColorClass()}`}>{value}%</span>
+    <div className="mb-4">
+      <div className="flex justify-between items-center mb-1">
+        <span className="text-sm font-medium text-interview-text">{label}</span>
+        <span className="text-sm font-semibold text-interview-text">{value}%</span>
       </div>
-      <Progress value={value} className="h-2" indicatorClassName={getProgressColor()} />
+      <Progress 
+        value={value} 
+        className="h-2 w-full bg-slate-200"
+        // Remove the indicatorClassName prop and use style for the indicator color
+        style={{ 
+          "--progress-indicator-color": getColorClass().replace("bg-", "var(--")+")"
+        } as React.CSSProperties}
+      />
     </div>
   );
 };

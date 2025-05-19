@@ -1,9 +1,68 @@
 
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import VideoRecorder from "@/components/VideoRecorder";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Zap } from "lucide-react";
+import { useVideo } from "@/contexts/VideoContext";
+import { useToast } from "@/components/ui/use-toast";
 
 const Interview: React.FC = () => {
+  const [description, setDescription] = useState("");
+  const [position, setPosition] = useState("");
+  const { isRecording, recordedVideo } = useVideo();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  };
+
+  const handlePositionChange = (value: string) => {
+    setPosition(value);
+  };
+
+  const handleAnalyze = () => {
+    if (!recordedVideo) {
+      toast({
+        title: "Nenhuma gravação disponível",
+        description: "Você precisa gravar uma entrevista antes de analisá-la.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!description) {
+      toast({
+        title: "Campo obrigatório",
+        description: "Por favor, adicione uma descrição para a entrevista.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!position) {
+      toast({
+        title: "Campo obrigatório",
+        description: "Por favor, selecione o cargo para a entrevista.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Simulate API call to analyze interview
+    toast({
+      title: "Analisando entrevista",
+      description: "Sua entrevista está sendo processada pela IA.",
+    });
+    
+    // Navigate to analysis page
+    navigate("/analysis");
+  };
+
   return (
     <div className="min-h-screen bg-interview-background flex flex-col">
       <header className="bg-white border-b border-interview-border py-4">
@@ -30,6 +89,59 @@ const Interview: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Description, Position Selection and Analysis Button */}
+          <div className="mt-6 space-y-4">
+            <Card className="border-none shadow-lg">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="position" className="block text-sm font-medium text-interview-text mb-1">
+                      Cargo
+                    </label>
+                    <Select value={position} onValueChange={handlePositionChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecione o cargo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="desenvolvedor">Desenvolvedor</SelectItem>
+                        <SelectItem value="designer">Designer</SelectItem>
+                        <SelectItem value="gerente_projeto">Gerente de Projeto</SelectItem>
+                        <SelectItem value="analista_dados">Analista de Dados</SelectItem>
+                        <SelectItem value="marketing">Especialista em Marketing</SelectItem>
+                        <SelectItem value="rh">Analista de RH</SelectItem>
+                        <SelectItem value="vendas">Representante de Vendas</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="description" className="block text-sm font-medium text-interview-text mb-1">
+                      Descrição da Entrevista
+                    </label>
+                    <Textarea
+                      id="description"
+                      value={description}
+                      onChange={handleDescriptionChange}
+                      placeholder="Descreva o objetivo desta entrevista e quaisquer detalhes importantes..."
+                      className="min-h-[100px] resize-y"
+                    />
+                  </div>
+
+                  <div className="pt-2">
+                    <Button
+                      onClick={handleAnalyze}
+                      className="w-full bg-interview-primary hover:bg-interview-primary/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      disabled={isRecording}
+                    >
+                      <Zap className="w-5 h-5" />
+                      Analisar com IA
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
       
