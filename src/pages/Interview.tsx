@@ -11,15 +11,10 @@ import { useVideo } from "@/contexts/VideoContext";
 import { useToast } from "@/components/ui/use-toast";
 
 const Interview: React.FC = () => {
-  const [description, setDescription] = useState("");
   const [position, setPosition] = useState("");
   const { isRecording, recordedVideo } = useVideo();
   const { toast } = useToast();
   const navigate = useNavigate();
-
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value);
-  };
 
   const handlePositionChange = (value: string) => {
     setPosition(value);
@@ -30,15 +25,6 @@ const Interview: React.FC = () => {
       toast({
         title: "Nenhuma gravação disponível",
         description: "Você precisa gravar uma entrevista antes de analisá-la.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!description) {
-      toast({
-        title: "Campo obrigatório",
-        description: "Por favor, adicione uma descrição para a entrevista.",
         variant: "destructive",
       });
       return;
@@ -90,7 +76,7 @@ const Interview: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Description, Position Selection and Analysis Button */}
+          {/* Job Selection and Analysis Button */}
           <div className="mt-6 space-y-4">
             <Card className="border-none shadow-lg">
               <CardContent className="p-6">
@@ -115,19 +101,6 @@ const Interview: React.FC = () => {
                     </Select>
                   </div>
 
-                  <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-interview-text mb-1">
-                      Descrição da Entrevista
-                    </label>
-                    <Textarea
-                      id="description"
-                      value={description}
-                      onChange={handleDescriptionChange}
-                      placeholder="Descreva o objetivo desta entrevista e quaisquer detalhes importantes..."
-                      className="min-h-[100px] resize-y"
-                    />
-                  </div>
-
                   <div className="pt-2">
                     <Button
                       onClick={handleAnalyze}
@@ -137,6 +110,17 @@ const Interview: React.FC = () => {
                       <Zap className="w-5 h-5" />
                       Analisar com IA
                     </Button>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <label htmlFor="aiDescription" className="block text-sm font-medium text-interview-text mb-1">
+                      Descrição da Entrevista (Análise da IA)
+                    </label>
+                    <div className="bg-gray-50 rounded-lg p-4 min-h-[100px] border border-gray-200">
+                      <p className="text-interview-secondary italic">
+                        A análise da entrevista será exibida aqui após o processamento pela IA.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>

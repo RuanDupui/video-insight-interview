@@ -91,10 +91,10 @@ const Analysis: React.FC = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <AnalysisMetric title="Comunicação" value={analysis.communication} />
-                      <AnalysisMetric title="Clareza" value={analysis.clarity} />
-                      <AnalysisMetric title="Confiança" value={analysis.confidence} />
-                      <AnalysisMetric title="Energia" value={analysis.energy} />
+                      <AnalysisMetric label="Comunicação" value={analysis.communication} color="green" />
+                      <AnalysisMetric label="Clareza" value={analysis.clarity} color="yellow" />
+                      <AnalysisMetric label="Confiança" value={analysis.confidence} color="blue" />
+                      <AnalysisMetric label="Energia" value={analysis.energy} color="purple" />
                     </div>
                   </CardContent>
                 </Card>
