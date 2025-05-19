@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Zap } from "lucide-react";
+import { Zap, Save, FileText } from "lucide-react";
 import { useVideo } from "@/contexts/VideoContext";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -45,6 +45,37 @@ const Interview: React.FC = () => {
       description: "Sua entrevista está sendo processada pela IA.",
     });
     
+    // Navigate to analysis page
+    navigate("/analysis");
+  };
+
+  const handleSave = () => {
+    if (!recordedVideo) {
+      toast({
+        title: "Nenhuma gravação disponível",
+        description: "Você precisa gravar uma entrevista antes de salvá-la.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Simulate saving the interview
+    toast({
+      title: "Entrevista salva",
+      description: "Sua entrevista foi salva com sucesso.",
+    });
+  };
+
+  const handleViewResults = () => {
+    if (!recordedVideo) {
+      toast({
+        title: "Nenhuma gravação disponível",
+        description: "Você precisa gravar e analisar uma entrevista antes de ver os resultados.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Navigate to analysis page
     navigate("/analysis");
   };
@@ -101,14 +132,32 @@ const Interview: React.FC = () => {
                     </Select>
                   </div>
 
-                  <div className="pt-2">
+                  <div className="pt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
                     <Button
                       onClick={handleAnalyze}
-                      className="w-full bg-interview-primary hover:bg-interview-primary/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      className="bg-interview-primary hover:bg-interview-primary/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
                       disabled={isRecording}
                     >
                       <Zap className="w-5 h-5" />
                       Analisar com IA
+                    </Button>
+                    
+                    <Button
+                      onClick={handleSave}
+                      className="bg-interview-accent hover:bg-interview-accent/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      disabled={isRecording}
+                    >
+                      <Save className="w-5 h-5" />
+                      Salvar Entrevista
+                    </Button>
+                    
+                    <Button
+                      onClick={handleViewResults}
+                      className="bg-interview-info hover:bg-interview-info/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      disabled={isRecording}
+                    >
+                      <FileText className="w-5 h-5" />
+                      Ver Resultados
                     </Button>
                   </div>
                   
