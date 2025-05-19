@@ -70,13 +70,13 @@ const Interview: React.FC = () => {
     if (!recordedVideo) {
       toast({
         title: "Nenhuma gravação disponível",
-        description: "Você precisa gravar e analisar uma entrevista antes de ver os resultados.",
+        description: "Você precisa gravar uma entrevista antes de ver os resultados.",
         variant: "destructive",
       });
       return;
     }
 
-    // Navigate to analysis page
+    // Navigate to analysis page - same as handleAnalyze
     navigate("/analysis");
   };
 
