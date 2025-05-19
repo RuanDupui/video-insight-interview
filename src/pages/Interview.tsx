@@ -132,32 +132,14 @@ const Interview: React.FC = () => {
                     </Select>
                   </div>
 
-                  <div className="pt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="pt-2">
                     <Button
                       onClick={handleAnalyze}
-                      className="bg-interview-primary hover:bg-interview-primary/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      className="w-full bg-interview-primary hover:bg-interview-primary/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
                       disabled={isRecording}
                     >
                       <Zap className="w-5 h-5" />
                       Analisar com IA
-                    </Button>
-                    
-                    <Button
-                      onClick={handleSave}
-                      className="bg-interview-accent hover:bg-interview-accent/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
-                      disabled={isRecording}
-                    >
-                      <Save className="w-5 h-5" />
-                      Salvar Entrevista
-                    </Button>
-                    
-                    <Button
-                      onClick={handleViewResults}
-                      className="bg-interview-info hover:bg-interview-info/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
-                      disabled={isRecording}
-                    >
-                      <FileText className="w-5 h-5" />
-                      Ver Resultados
                     </Button>
                   </div>
                   
@@ -170,6 +152,26 @@ const Interview: React.FC = () => {
                         A análise da entrevista será exibida aqui após o processamento pela IA.
                       </p>
                     </div>
+                  </div>
+
+                  <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <Button
+                      onClick={handleSave}
+                      className="bg-interview-accent hover:bg-interview-accent/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      disabled={isRecording}
+                    >
+                      <Save className="w-5 h-5" />
+                      Salvar Entrevista
+                    </Button>
+                    
+                    <Button
+                      onClick={handleViewResults}
+                      className="bg-interview-success hover:bg-interview-success/90 text-white font-medium py-3 rounded-md shadow-md flex items-center justify-center gap-2"
+                      disabled={isRecording}
+                    >
+                      <FileText className="w-5 h-5" />
+                      Ver Resultados
+                    </Button>
                   </div>
                 </div>
               </CardContent>
