@@ -84,43 +84,6 @@ const Analysis: React.FC = () => {
             </TabsList>
             
             <TabsContent value="resumo" className="animate-fade-in">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl">Métricas de Performance</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <AnalysisMetric label="Comunicação" value={analysis.communication} color="green" />
-                      <AnalysisMetric label="Clareza" value={analysis.clarity} color="yellow" />
-                      <AnalysisMetric label="Confiança" value={analysis.confidence} color="blue" />
-                      <AnalysisMetric label="Energia" value={analysis.energy} color="purple" />
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-xl">Insights</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <h3 className="font-medium text-interview-text mb-2">Pontos Fortes</h3>
-                    <div className="mb-4">
-                      {insights.strengths.map((strength, index) => (
-                        <InsightItem key={index} text={strength} type="strength" />
-                      ))}
-                    </div>
-                    
-                    <h3 className="font-medium text-interview-text mb-2">Áreas para Melhorar</h3>
-                    <div>
-                      {insights.improvements.map((improvement, index) => (
-                        <InsightItem key={index} text={improvement} type="improvement" />
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-              
               <Card>
                 <CardHeader>
                   <CardTitle className="text-xl">Resumo da Análise</CardTitle>
