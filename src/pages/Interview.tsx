@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VideoRecorder from "@/components/VideoRecorder";
@@ -6,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Zap, Save, FileText } from "lucide-react";
+import { Zap, Save, FileText, Send, MessageSquare } from "lucide-react";
 import { useVideo } from "@/contexts/VideoContext";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -15,6 +14,13 @@ const Interview: React.FC = () => {
   const { isRecording, recordedVideo } = useVideo();
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  // Chat state
+  const [userMessage, setUserMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState<{role: "user" | "assistant", content: string}[]>([
+    { role: "assistant", content: "Olá! Estou aqui para ajudar com qualquer dúvida sobre entrevistas. O que gostaria de saber?" }
+  ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePositionChange = (value: string) => {
     setPosition(value);
@@ -78,6 +84,30 @@ const Interview: React.FC = () => {
 
     // Navigate to analysis page - same as handleAnalyze
     navigate("/analysis");
+  };
+
+  // Chat functionality
+  const handleSendMessage = () => {
+    if (!userMessage.trim()) return;
+    
+    // Add user message to chat
+    setChatMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    
+    // Mock AI response
+    setIsLoading(true);
+    
+    // Simulate API delay
+    setTimeout(() => {
+      setChatMessages(prev => [
+        ...prev, 
+        { 
+          role: "assistant", 
+          content: `Entendi sua pergunta sobre "${userMessage}". Para entrevistas de emprego, é importante preparar-se bem, pesquisar sobre a empresa e praticar suas respostas para perguntas comuns. Posso ajudar com mais dicas específicas se desejar.` 
+        }
+      ]);
+      setIsLoading(false);
+      setUserMessage("");
+    }, 1000);
   };
 
   return (
@@ -152,6 +182,65 @@ const Interview: React.FC = () => {
                         A análise da entrevista será exibida aqui após o processamento pela IA.
                       </p>
                     </div>
+                  </div>
+
+                  {/* Chat Component */}
+                  <div className="mt-4">
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="flex flex-col gap-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <MessageSquare className="w-5 h-5" />
+                            <h3 className="text-lg font-medium">Converse com a IA</h3>
+                          </div>
+                          <div className="border rounded-lg p-4 h-60 overflow-y-auto">
+                            {chatMessages.map((message, index) => (
+                              <div 
+                                key={index} 
+                                className={`p-3 rounded-lg mb-2 ${
+                                  message.role === "user" 
+                                    ? "bg-primary text-primary-foreground ml-8" 
+                                    : "bg-gray-100 text-interview-text mr-8"
+                                }`}
+                              >
+                                {message.content}
+                              </div>
+                            ))}
+                            {isLoading && (
+                              <div className="p-3 rounded-lg mb-2 bg-gray-100 text-interview-text mr-8">
+                                <div className="flex gap-1 items-center">
+                                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                                  <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          
+                          <div className="flex gap-2">
+                            <Textarea 
+                              placeholder="Faça uma pergunta sobre entrevistas..."
+                              className="resize-none"
+                              value={userMessage}
+                              onChange={(e) => setUserMessage(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                  e.preventDefault();
+                                  handleSendMessage();
+                                }
+                              }}
+                            />
+                            <Button 
+                              className="bg-green-500 hover:bg-green-600" 
+                              onClick={handleSendMessage}
+                              disabled={isLoading || !userMessage.trim()}
+                            >
+                              <Send className="w-5 h-5" />
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
 
                   <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
