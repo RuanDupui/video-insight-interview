@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
+import { VolumeAnalyzer } from "@/components/VolumeAnalyzer";
 
 const VideoRecorder: React.FC = () => {
   const { isRecording, startRecording, stopRecording, setRecordedVideo } = useVideo();
@@ -13,6 +14,8 @@ const VideoRecorder: React.FC = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
+  const [audioSource, setAudioSource] = useState<MediaStreamAudioSourceNode | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -28,6 +31,12 @@ const VideoRecorder: React.FC = () => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+        
+        // Setup audio context for volume analysis
+        const context = new AudioContext();
+        const source = context.createMediaStreamSource(stream);
+        setAudioContext(context);
+        setAudioSource(source);
       } catch (error) {
         console.error("Error accessing camera:", error);
         toast({
@@ -43,6 +52,9 @@ const VideoRecorder: React.FC = () => {
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+      if (audioContext) {
+        audioContext.close();
       }
     };
   }, [toast]);
@@ -157,6 +169,13 @@ const VideoRecorder: React.FC = () => {
         muted
         className="w-full h-auto rounded-lg shadow-lg"
       />
+      
+      {/* Volume Analyzer */}
+      {audioSource && audioContext && (
+        <div className="my-3">
+          <VolumeAnalyzer audioSource={audioSource} audioContext={audioContext} />
+        </div>
+      )}
       
       <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-4">
         {!isRecording ? (
